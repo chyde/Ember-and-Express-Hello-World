@@ -1,4 +1,5 @@
-# bb
+# Ember-and-Express-Hello-World
+The tiniest example of Ember.js and Express.js working together using JSON API  
 
 This README outlines the details of collaborating on this Ember application.
 A short introduction of this app could easily go here.
