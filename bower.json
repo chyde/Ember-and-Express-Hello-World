@@ -1,0 +1,19 @@
+{
+  "name": "bb",
+  "description": "Mini pizza app",
+  "main": "",
+  "authors": [
+    "Chris Hyde <chyde@vendnovation.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}
