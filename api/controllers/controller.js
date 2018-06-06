@@ -10,7 +10,7 @@ var getPizzas = function() {
   return new Promise(function(resolve, reject) {
     var db = MongoClient.connect(dbUrl, function(err, client) {
       
-      console.log("sonnecting to ", databaseName);
+      console.log("connecting to ", databaseName);
       const db = client.db(databaseName);
       resolve(db.collection('pizzas').find({}, {name: 1, description: 1}).toArray());
     });

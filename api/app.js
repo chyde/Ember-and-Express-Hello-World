@@ -14,12 +14,20 @@ app.get("/pizzas", function(req, res)  {
     res.header("Access-Control-Allow-Headers", 
       "Origin, X-Requested-With, Content-Type, Accept");
 
+    console.log(pizzaData);
+
     // HACK: removes nested object references by stringifying and re-parsing)
-    if(! validator.isValid(JSON.parse(JSON.stringify(pizzaData)))) {
-      console.warn("Ruh roh!  Bad JSON-API data");
+    var dataString = JSON.parse(JSON.stringify(pizzaData));
+
+    var jsonApiPizzas = { data: dataString }
+    
+    // Validate and handle json api
+    if(! validator.isValid(jsonApiPizzas)) {
+      console.warn("ERROR: Ruh roh.... bad JSON-API data:", pizzaData);
       res.send({ data: [] }); 
     }
-    res.send(pizzaData); 
+
+    res.send(jsonApiPizzas); 
   });
 });
  
