@@ -3,5 +3,7 @@
 <ol>
   {{#each model as |pizza|}}
       <li>{{pizza.name}} - {{pizza.description}}</li>
+  {{else}}
+      <li><em>No pizzas available</em></li>
   {{/each}}
 </ol>
