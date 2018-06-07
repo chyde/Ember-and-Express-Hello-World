@@ -1,17 +1,18 @@
 var MongoClient = require('mongodb');
 var assert = require('assert');
 
-// server.js
-const port = 3000;
-const databaseName = 'bb';
-const dbUrl = 'mongodb://127.0.0.1:27017/';
-
 var getPizzas = function() {
   return new Promise(function(resolve, reject) {
     var db = MongoClient.connect(dbUrl, function(err, client) {
-      
-      console.log("connecting to ", databaseName);
       const db = client.db(databaseName);
+
+      db.listCollections({name: "pdfdfizzas"})
+        .next(function(err, collinfo) {
+            if (collinfo) {
+                console.log("pizzas Exists");
+            }
+        });
+
       resolve(db.collection('pizzas').find({}, {name: 1, description: 1}).toArray());
     });
   })
@@ -32,6 +33,5 @@ var getPizzas = function() {
     return pizzaData;
   });
 }
-
  
 module.exports = getPizzas;
