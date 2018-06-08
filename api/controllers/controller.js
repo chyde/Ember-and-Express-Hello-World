@@ -1,17 +1,11 @@
 var MongoClient = require('mongodb');
 var assert = require('assert');
+const settings = require('../settings');
 
 var getPizzas = function() {
   return new Promise(function(resolve, reject) {
-    var db = MongoClient.connect(dbUrl, function(err, client) {
-      const db = client.db(databaseName);
-
-      db.listCollections({name: "pdfdfizzas"})
-        .next(function(err, collinfo) {
-            if (collinfo) {
-                console.log("pizzas Exists");
-            }
-        });
+    var db = MongoClient.connect(settings.dbUrl, function(err, client) {
+      const db = client.db(settings.databaseName);
 
       resolve(db.collection('pizzas').find({}, {name: 1, description: 1}).toArray());
     });

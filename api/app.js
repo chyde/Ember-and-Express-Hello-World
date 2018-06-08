@@ -3,16 +3,12 @@ const express = require('express')
 var Validator = require('jsonapi-validator').Validator;
 var validator = new Validator();
 const app = express()
-const Setup = require("./setup");
+const SchemaManager = require("./setup");
 const getPizzas = require('./controllers/controller');
-
-// server.js
-const port = 3000;
-var databaseName = 'bb';
-const dbUrl = 'mongodb://127.0.0.1:27017/';
+const settings = require('./settings');
 
 
-(new Setup(dbUrl, databaseName, true)).execute();
+SchemaManager.execute();
 
 app.get("/pizzas", function(req, res)  { 
   getPizzas().then(function(pizzaData) {

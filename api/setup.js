@@ -1,16 +1,15 @@
 var MongoClient = require('mongodb');
+const settings = require('./settings');
 
-var Setup = function(dbUrl, databaseName, debugMode = false) {
-  this.dbUrl = dbUrl;
-
-  this.debugMode = debugMode;
+var SchemaManager = {
+  debugMode : true
 };
 
-Setup.prototype.ensureCollection = function(collName) {
-  var client = MongoClient.connect(this.dbUrl, function(err, client) {
-    console.log("databaseName", databaseName);
-    var db = client.db(databaseName);
-    db.listCollections({
+SchemaManager.ensureCollection = function(collName) {
+  var myCollectionList;
+  MongoClient.connect(settings.dbUrl, function(err, client) {
+    var db = client.db(settings.databaseName);
+    myCollectionList = db.listCollections({
         name: collName
       })
       .next(function(err, collinfo) {
@@ -23,16 +22,9 @@ Setup.prototype.ensureCollection = function(collName) {
   });
 };
 
-Setup.prototype.execute = function() {
-  if (this.debugMode) {
-    console.log("Starting setup...");
-  }
+SchemaManager.execute = function() {
+  console.log("Checking collections...");
+  var client = SchemaManager.ensureCollection("pizzas");
+}
 
-  this.ensureCollection("pizzas");
-
-  if (this.debugMode) {
-    console.log("Setup Complete.");
-  }
-};
-
-module.exports = Setup;
+module.exports = SchemaManager;
