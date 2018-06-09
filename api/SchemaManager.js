@@ -14,9 +14,13 @@ SchemaManager.ensureCollection = function(collName) {
       })
       .next(function(err, collinfo) {
         if (collinfo) {
-          console.log(collName + " exists");
-        } else {
-          console.log(collName + " does not exists");
+          console.log(collName + " exists.");
+        } else {  
+          console.log(collName + " does not exists.");
+          db.createCollection(collName, function(err, collection) { 
+            if(err) console.log(collName + " could not be created.");
+            else console.log(collName + " created.");
+          });
         }
       });
   });

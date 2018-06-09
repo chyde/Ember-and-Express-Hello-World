@@ -2,22 +2,27 @@ const express = require('express')
 
 var Validator = require('jsonapi-validator').Validator;
 var validator = new Validator();
+const bodyParser= require('body-parser');
 const app = express()
-const SchemaManager = require("./setup");
-const getPizzas = require('./controllers/controller');
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+
+const SchemaManager = require("./SchemaManager");
+const controller = require('./controllers/controller');
 const settings = require('./settings');
 
 
-SchemaManager.execute();
-
-app.get("/pizzas", function(req, res)  { 
-  getPizzas().then(function(pizzaData) {
-    // pack and send
-    //res.set('Content-Type', 'application/vnd.api+json');
+var addCors = function(res) {
     // NOTE: CORS for testing
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", 
       "Origin, X-Requested-With, Content-Type, Accept");
+}
+
+SchemaManager.execute();
+
+app.get("/pizzas", function(req, res)  { 
+  controller.getPizzas().then(function(pizzaData) {
+    addCors(res);
 
     // HACK: removes nested object references by stringifying and re-parsing)
     var dataString = JSON.parse(JSON.stringify(pizzaData));
@@ -31,6 +36,19 @@ app.get("/pizzas", function(req, res)  {
 
     res.send(jsonApiPizzas); 
   });
+});
+
+app.options("/pizzas", function(req, res)  { 
+  addCors(res);
+  res.send();
+});
+
+app.post("/pizzas", function(req, res)  {
+  addCors(res);
+
+  controller.addPizza(req.body.data.attributes, function(result) {
+    res.send(result);
+  })
 });
  
 app.listen(3000, () => console.log('Pizza at port 3000!'));
