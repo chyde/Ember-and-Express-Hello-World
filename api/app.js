@@ -7,7 +7,7 @@ const app = express()
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 const SchemaManager = require("./SchemaManager");
-const controller = require('./controllers/controller');
+const pizzaController = require('./controllers/PizzaController');
 const settings = require('./settings');
 
 
@@ -21,7 +21,7 @@ var addCors = function(res) {
 SchemaManager.execute();
 
 app.get("/pizzas", function(req, res)  { 
-  controller.getPizzas().then(function(pizzaData) {
+  pizzaController.getPizzas().then(function(pizzaData) {
     addCors(res);
 
     // HACK: removes nested object references by stringifying and re-parsing)
@@ -30,7 +30,7 @@ app.get("/pizzas", function(req, res)  {
     
     // Validate and handle json api
     if(! validator.isValid(jsonApiPizzas)) {
-      console.warn("ERROR: Ruh roh.... bad JSON-API data:", pizzaData);
+      console.warn("ERROR: Bad JSON-API data:", pizzaData);
       res.send({ data: [] }); 
     }
 
@@ -46,9 +46,11 @@ app.options("/pizzas", function(req, res)  {
 app.post("/pizzas", function(req, res)  {
   addCors(res);
 
-  controller.addPizza(req.body.data.attributes, function(result) {
+  pizzaController.addPizza(req.body.data.attributes, function(result) {
     res.send(result);
   })
 });
+
+
  
 app.listen(3000, () => console.log('Pizza at port 3000!'));
