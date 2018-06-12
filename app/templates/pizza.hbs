@@ -1,9 +1,18 @@
 <h2>BEST PIZZAS</h2>
 
+<h3>Add new pizza</h3>
+<label for="pizzaName">Name</label> <br>
+{{input value=pizzaName}} <br>
+<br>
+<label for="pizzaDescription">Description</label> <br>
+{{input value=pizzaDescription}}  <br><br>
+
+<button {{action "addPizza"}}>Add pizza</button>
+
 <ol>
   {{#each model as |pizza|}}
       <li>{{pizza.name}} - {{pizza.description}}</li>
   {{else}}
-      <li><em>No pizzas available</em></li>
+      <em>No pizzas available</em>
   {{/each}}
 </ol>
