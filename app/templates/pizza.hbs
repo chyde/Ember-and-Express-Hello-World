@@ -11,7 +11,7 @@
 
 <ol>
   {{#each model as |pizza|}}
-      <li>{{pizza.name}} - {{pizza.description}}</li>
+      <li><button {{action "deletePizza" pizza.id}}>-</button> {{pizza.name}} - {{pizza.description}} - {{pizza.id}}</li>
   {{else}}
       <em>No pizzas available</em>
   {{/each}}

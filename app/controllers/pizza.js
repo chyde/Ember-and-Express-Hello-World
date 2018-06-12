@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 
 export default Controller.extend({
   actions: {
-    addPizza () {
+    addPizza() {
       var name = this.get('pizzaName');
       var desc = this.get('pizzaDescription');
       // TODO: add validation
@@ -12,6 +12,17 @@ export default Controller.extend({
       });
 
       newPizza.save();
+    },
+
+    deletePizza(pizzaId) {
+      this.store.findRecord('pizza', pizzaId, {
+          backgroundReload: false
+        })
+        .then(function(pizza) {
+          pizza.deleteRecord();
+          console.log("isDelet", pizza.get('isDeleted')); // => true
+          pizza.save(); // => DELETE to /posts/1
+        });
     }
   }
 });
