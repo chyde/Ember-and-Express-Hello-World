@@ -48,7 +48,8 @@ var PizzaController = {
   },
 
   mongoToJsonApi: function(mongoObject, typeName) {
-    var mongoId = mongoObject._id;
+    console.log("IDS", mongoObject._id, mongoObject.id);
+    var mongoId = mongoObject._id ? mongoObject._id : mongoObject.id;
     delete mongoObject._id;
 
     return {
@@ -85,7 +86,7 @@ var PizzaController = {
       var newvalues = { $set: { name: pizza.attributes.name, description: pizza.attributes.description } };
 
       db
-      .collection("customers")
+      .collection("pizzas")
       .updateOne(myquery, newvalues, function(err, result) {
         if (err) {
           console.log(err);

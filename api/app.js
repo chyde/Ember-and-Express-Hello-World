@@ -72,7 +72,7 @@ app.patch("/pizzas/:pizzaId", function(req, res) {
   console.log("UPDATING THIS", req.body.data); 
 
   pizzaController.updatePizza(req.body.data, function(result) {
-    res.send(result);
+    res.status(204).send(null);
   })
 });
 
