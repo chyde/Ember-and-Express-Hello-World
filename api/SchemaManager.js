@@ -10,6 +10,11 @@ var SchemaManager = {
   ensureCollection : function (collName) {
     var myCollectionList;
     MongoClient.connect(settings.dbUrl, function(err, client) {
+      if(client == null) {
+        console.error("Mongo could not connect! Is your database not running?");
+        throw(new Error("Could not connect to mongo."));
+      }
+
       var db = client.db(settings.databaseName);
       myCollectionList = db.listCollections({
           name: collName

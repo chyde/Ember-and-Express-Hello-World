@@ -11,7 +11,23 @@
 
 <ol>
   {{#each model as |pizza|}}
-      <li>{{pizza.name}} - {{pizza.description}}</li>
+      <li>
+        {{#if (eq (concat "" editingId) (concat "" pizza.id))}}
+          <button {{action 'reloadPizza' pizza}}>X</button>
+          {{input value=pizza.name}}
+        {{else}}
+          {{#if (eq editingId)}}
+            <button {{action 'deletePizza' pizza.id}}>-</button>
+          {{/if}}
+          {{pizza.name}} - {{pizza.description}} - {{pizza.id}} 
+          {{#if (eq editingId)}}
+            <button {{action 'editPizza' pizza.id}}>✐</button>
+          {{/if}}
+        {{/if}}
+        {{#if (eq (concat "" editingId) (concat "" pizza.id))}}
+          <button {{action 'updatePizza' pizza}}>Save</button>
+        {{/if}}
+      </li>
   {{else}}
       <em>No pizzas available</em>
   {{/each}}

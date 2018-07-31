@@ -6,6 +6,24 @@ const settings = require('../settings');
 
 var PizzaController = {
 
+  getPizza: function(pizzaId, callback) {
+    MongoClient.connect(settings.dbUrl, function(err, client) {
+          const db = client.db(settings.databaseName);
+
+          db.collection('pizzas')
+            .findOne({
+              _id: ObjectID(pizzaId)
+            }, function(err, result) {
+              console.log("err", err);
+              assert.equal(err, null);
+              //assert.equal(1, result.result.n);
+              console.log("Found the document " + result.name);
+              callback(result);
+              db.close();
+            });
+        });
+  },
+
   getPizzas: function() {
     return new Promise(function(resolve, reject) {
         MongoClient.connect(settings.dbUrl, function(err, client) {
@@ -30,7 +48,8 @@ var PizzaController = {
   },
 
   mongoToJsonApi: function(mongoObject, typeName) {
-    var mongoId = mongoObject._id;
+    console.log("IDS", mongoObject._id, mongoObject.id);
+    var mongoId = mongoObject._id ? mongoObject._id : mongoObject.id;
     delete mongoObject._id;
 
     return {
@@ -50,12 +69,33 @@ var PizzaController = {
           name: pizza.name,
           description: pizza.description
         }, function(err, result) {
-          var pizzaJsonApi = mongoToJsonApi(result.ops[0], "pizza");
+          var pizzaJsonApi = PizzaController.mongoToJsonApi(result.ops[0], "pizza");
           callback({
             data: pizzaJsonApi
           });
           db.close();
         });
+    });
+  },
+
+  updatePizza: function(pizza, callback) {
+    MongoClient.connect(settings.dbUrl, function(err, client) {
+      const db = client.db(settings.databaseName);
+
+      var myquery = { _id: ObjectID(pizza.id) };
+      var newvalues = { $set: { name: pizza.attributes.name, description: pizza.attributes.description } };
+
+      db
+      .collection("pizzas")
+      .updateOne(myquery, newvalues, function(err, result) {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+
+        callback(result);
+        db.close();
+      });
     });
   },
 
