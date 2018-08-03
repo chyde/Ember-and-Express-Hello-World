@@ -25,6 +25,16 @@ var addCors = function(res, next) {
 
 SchemaManager.execute();
 
+/// Auth API
+app.post("/token", function(req, res) {
+  // TODO: implement authentication
+  console.log(req.body, req.body.grant_type);
+  console.log("Getting auth token"); //: user:" + req.body.identification + " pw:" + "*".repeat(req.body.password.length));
+  res.status(200).send('{ "access_token" : "my token" }');
+});
+
+
+/// Pizza API
 app.get("/pizzas/:pizzaId", function(req, res) {
   pizzaController.getPizza(req.params.pizzaId, function(result) {
     res.status(200)
@@ -84,15 +94,6 @@ app.delete("/pizzas/:pizzaId", function(req, res) {
       .send({});
   });
 });
-
-
-app.post("/token", function(req, res) {
-  // TODO: implement authentication
-  console.log(req.body, req.data);
-  console.log("Getting auth token"); //: user:" + req.body.identification + " pw:" + "*".repeat(req.body.password.length));
-  res.status(200).send('{ "access_token" : "my token" }');
-});
-
 
 
 app.listen(3000, () => console.log('Pizza at port 3000!'));
