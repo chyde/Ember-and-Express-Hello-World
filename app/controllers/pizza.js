@@ -29,10 +29,8 @@ export default Controller.extend({
     },
 
     updatePizza (pizza) {
-      
-      
       this.store.findRecord('pizza', pizza.id, { backgroundReload: false }).then(function(pizza) {
-        pizza.save().then(function(){
+        pizza.save().then(function(pizza){
           console.log("Saved", pizza.get('name'));
         });
       });
