@@ -86,5 +86,13 @@ app.delete("/pizzas/:pizzaId", function(req, res) {
 });
 
 
+app.post("/token", function(req, res) {
+  // TODO: implement authentication
+  console.log(req.body, req.data);
+  console.log("Getting auth token"); //: user:" + req.body.identification + " pw:" + "*".repeat(req.body.password.length));
+  res.status(200).send('{ "access_token" : "my token" }');
+});
+
+
 
 app.listen(3000, () => console.log('Pizza at port 3000!'));
