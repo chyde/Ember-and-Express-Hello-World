@@ -5,12 +5,13 @@ var assert = require('assert');
 const settings = require('../settings');
 
 var PizzaController = {
+  collectionName: "pizzas",
 
   getPizza: function(pizzaId, callback) {
     MongoClient.connect(settings.dbUrl, function(err, client) {
           const db = client.db(settings.databaseName);
 
-          db.collection('pizzas')
+          db.collection(PizzaController.collectionName)
             .findOne({
               _id: ObjectID(pizzaId)
             }, function(err, result) {
@@ -29,7 +30,7 @@ var PizzaController = {
         MongoClient.connect(settings.dbUrl, function(err, client) {
           const db = client.db(settings.databaseName);
 
-          resolve(db.collection('pizzas').find({}, {
+          resolve(db.collection(PizzaController.collectionName).find({}, {
             name: 1,
             description: 1
           }).toArray());
@@ -53,26 +54,25 @@ var PizzaController = {
     delete mongoObject._id;
 
     return {
-      id: mongoId,
+      id: mongoId.toString(),
       type: typeName,
       attributes: Object.assign({}, mongoObject)
     };
   },
 
   addPizza: function(pizza, callback) {
+    console.log("add pizza", pizza);
 
     MongoClient.connect(settings.dbUrl, function(err, client) {
       const db = client.db(settings.databaseName);
 
-      db.collection('pizzas')
+      db.collection(PizzaController.collectionName)
         .insert({
           name: pizza.name,
           description: pizza.description
         }, function(err, result) {
-          var pizzaJsonApi = PizzaController.mongoToJsonApi(result.ops[0], "pizza");
-          callback({
-            data: pizzaJsonApi
-          });
+          var pizzaJsonApi = PizzaController.mongoToJsonApi(result.ops[0], "pizzas");
+          callback({ data: pizzaJsonApi });
           db.close();
         });
     });
@@ -86,7 +86,7 @@ var PizzaController = {
       var newvalues = { $set: { name: pizza.attributes.name, description: pizza.attributes.description } };
 
       db
-      .collection("pizzas")
+      .collection(PizzaController.collectionName)
       .updateOne(myquery, newvalues, function(err, result) {
         if (err) {
           console.log(err);
@@ -103,7 +103,7 @@ var PizzaController = {
     MongoClient.connect(settings.dbUrl, function(err, client) {
       const db = client.db(settings.databaseName);
 
-      db.collection('pizzas')
+      db.collection(PizzaController.collectionName)
         .deleteOne({
           _id: ObjectID(pizzaId)
         }, function(err, result) {

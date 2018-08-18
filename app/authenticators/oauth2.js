@@ -2,5 +2,5 @@ import OAuth2PasswordGrant from 'ember-simple-auth/authenticators/oauth2-passwor
 
 export default OAuth2PasswordGrant.extend({
   serverTokenEndpoint: 'http://localhost:3000/token',
-  identificationField: 'identification'
+  //identificationField: 'identification'
 });

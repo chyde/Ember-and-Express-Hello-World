@@ -21,6 +21,7 @@
           {{/if}}
           {{pizza.name}} - {{pizza.description}} - {{pizza.id}} 
           {{#if (eq editingId)}}
+            {{log editingId}}
             <button {{action 'editPizza' pizza.id}}>✐</button>
           {{/if}}
         {{/if}}

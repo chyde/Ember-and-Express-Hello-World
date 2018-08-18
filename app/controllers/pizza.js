@@ -14,6 +14,8 @@ export default Controller.extend({
       });
 
       newPizza.save();
+
+      console.log(this.get('editingId'));
     },
 
     deletePizza (pizzaId) {

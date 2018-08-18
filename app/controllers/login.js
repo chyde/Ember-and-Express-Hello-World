@@ -1,14 +1,17 @@
 import Controller from '@ember/controller';
+import { inject } from '@ember/service';
 
 export default Controller.extend({
-  session: Ember.inject.service('session'),
+  session: inject('session'),
 
   actions: {
     authenticate() {
-      let { identification, password } = this.getProperties('identification', 'password');
+      const credentials = this.getProperties('identification', 'password');
 
-      this.get('session').authenticate('authenticator:oauth2', identification, password).catch((reason) => {
-        console.log(reason.error);
+      console.log(credentials);
+      this.get('session').session.authenticate('authenticator:oauth2', credentials)
+      .catch((reason) => {
+        console.log("FUCK", reason.error);
       });
 
       console.log("Authenticating...");
